@@ -1,1 +1,2 @@
 # PerfectCD
+not a calculator
