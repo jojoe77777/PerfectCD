@@ -15,7 +15,7 @@ root = tk.Tk()
 chunkX = IntVar()
 chunkZ = IntVar()
 angle = StringVar()
-version = "0.5"
+version = "1.0"
 JojoeMode = False
 lastClip = "null_____"
 
@@ -44,12 +44,22 @@ def loadLookup():
 def lookupAngle(angle):
     return json.loads(angleIndexes)[angle]
 
+def lookupOverworld(coord):
+    readFile = open(os.getcwd() + "/overworldIndexes.json")
+    indexes = json.loads(readFile.read())
+    readFile.close()
+    return str(indexes[str(coord)])
+
 def parseData(jsonBlob, angle):
     contents = json.loads(jsonBlob)
     angles = contents[str(angle)]
     resultText = ''
     for i in angles:
-        resultText += i + "\n"
+        netherX = i.split(" ")[0]
+        netherZ = i.split(" ")[1]
+        overX = lookupOverworld(netherX)
+        overZ = lookupOverworld(netherZ)
+        resultText += i + " (" + overX + " " + overZ + ")\n"
     resultLabel.config(text=resultText, fg='green')
     
 def getGitIndex(x):
@@ -145,5 +155,5 @@ def mainLoop():
 loadLookup()
 lastClip = root.clipboard_get()
 root.after(0, mainLoop)
-root.geometry('250x260')
+root.geometry('250x280')
 root.mainloop()
